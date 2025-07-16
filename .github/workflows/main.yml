@@ -15,6 +15,8 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
+      with:
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}
       run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_HUB_USERNAME }}/paperless-document-enhancer:main
     - name: Log in to Docker Hub
       uses: docker/login-action@v2
@@ -22,4 +24,4 @@ jobs:
         username: ${{ secrets.DOCKER_HUB_USERNAME }}
         password: ${{ secrets.DOCKER_HUB_TOKEN }}
     - name: Push Docker Image
-      run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/paperless-document-enhance
+      run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/paperless-document-enhance:main
