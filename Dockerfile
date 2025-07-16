@@ -6,11 +6,12 @@ ENV NODE_ENV production
 WORKDIR /usr/src/app
 
 # Switch to a non-root user for running the application
-USER node
+USER root
 
 # Copy all the application source files into the container
 COPY . .
-RUN npm ci
+RUN npm ci && chown -R node:node .
+USER node
 
 # Expose port 3000 for the application
 EXPOSE 3000
