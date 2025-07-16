@@ -1,19 +1,15 @@
 FROM node:24-alpine
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
-# Create and set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Switch to a non-root user for running the application
 USER root
 
-# Copy all the application source files into the container
 COPY . .
-RUN npm ci && chown -R node:node .
+RUN apk add g++ make py3-pip pkgconfig pixman-dev cairo-dev pango-dev && npm ci && chown -R node:node .
 USER node
 
-# Expose port 3000 for the application
 EXPOSE 3000
 
 # Define the command to run the application
