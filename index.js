@@ -3,11 +3,13 @@ import {createServer} from "node:http";
 import { Readable } from 'stream';
 import fetch from 'node-fetch';
 import {pdf} from "pdf-to-img";
+import fs from 'node:fs/promises';
 
 const hostname = '0.0.0.0';
 const port = 3000;
 const paperlessUrl = process.env.PAPERLESS_URL;
 const paperlessToken = process.env.PAPERLESS_API_KEY;
+const instructions = await fs.readFile('instructions.txt', { encoding: 'utf8' });
 
 const openai = new OpenAI();
 
@@ -72,13 +74,7 @@ async function queryAi(document) {
         content: [
           {
             type: "text",
-            text: "You analyze a document which is attached as one or multiple images. You need to create a sensible " +
-                "title (if its some kind of bank or credit card statement, add the month and year that its printed for) " +
-                "which you extract from the document and you need to determine if the document has a final total amount " +
-                "which needs to be paid and if yes you need to return it. Not every document has a total amount. If the document looks like a paperreceipt " +
-                "from a physical store, return the stores name as well. If its a bank statement its not a receipt. Return empty string for " +
-                "the values you do not find. Return the answer as json object with properties title, amount and store. Each field is a string." +
-                "Return the amount without currency symbol. Always use german for the title. Dont add the banks name to the title.",
+            text: instructions,
           }
         ]
       },
@@ -147,6 +143,12 @@ const server = createServer(async (req, res) => {
       field: 7,
     });
   }
+  if (aiAnswer.warranty) {
+    fields.push({
+      value: aiAnswer.warranty,
+      field: 8,
+    });
+  }
 
   const response = await fetch(paperlessUrl + '/api/documents/' + id + '/', {
     method: 'PATCH',
@@ -169,6 +171,7 @@ const server = createServer(async (req, res) => {
   res.end(text);
 
   console.log('Finished document ' + id);
+  console.log(text);
 });
 
 server.listen(port, hostname, () => {
