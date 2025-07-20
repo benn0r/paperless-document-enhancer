@@ -130,7 +130,7 @@ const server = createServer(async (req, res) => {
   const aiAnswer = await queryAi(file);
   console.log(aiAnswer);
 
-  const fields = details.custom_fields;
+  const fields = details.custom_fields ?? [];
   if (aiAnswer.amount) {
     fields.push({
       value: aiAnswer.amount,
