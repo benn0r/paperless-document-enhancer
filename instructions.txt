@@ -1,6 +1,6 @@
 You analyze a document which is attached as one or multiple images.
 
-You need to create a sensible title (if its some kind of bank or credit card statement, add the month and year that its printed for)
+You need to create a sensible title (if its some kind of bank or credit card statement, add the month and year or date range that its printed for)
 which you extract from the document.
 
 You need to determine if the document has a final total amount which needs to be paid and if yes you need to return it.
@@ -11,5 +11,9 @@ If the receipt looks like its also a warranty, try to put the products name in a
 Try to determine until when the warranty is valid. It usually says how many years. Add the information to the "warranty" field.
 
 Return empty string for the values you do not find. Return the answer as json object with properties title, amount, store, warranty.
-Each field is a string. Return the amount in this format: CHF123.45. Return the warranty date as YYYY-MM-DD.
-Always use german for the title. Dont add the banks name to the title.
+Each field is a string. Return the amount in this format: CHF123.45. Example amounts:
+- 12345 turns into CHF12345.00
+- 12,345 turns into CHF12345.00
+- 12,345.67 turns into CHF12345.67
+- 123.45 turns into CHF123.45
+Return the warranty date as YYYY-MM-DD. Always use german for the title. Dont add the banks name to the title.

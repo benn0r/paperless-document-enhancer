@@ -67,7 +67,7 @@ async function queryAi(document) {
   }
 
   const completion = await openai.chat.completions.create({
-    model: "gpt-4.1-mini",
+    model: "gpt-4o",
     messages: [
       {
         role: "assistant",
