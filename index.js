@@ -149,6 +149,18 @@ const server = createServer(async (req, res) => {
       field: 8,
     });
   }
+  if (aiAnswer.pay_until) {
+    fields.push({
+      value: aiAnswer.pay_until,
+      field: 10,
+    });
+  }
+  if (aiAnswer.paid === 'true' || aiAnswer.pay_until) {
+    fields.push({
+      value: aiAnswer.paid === 'true',
+      field: 9,
+    });
+  }
 
   const response = await fetch(paperlessUrl + '/api/documents/' + id + '/', {
     method: 'PATCH',
